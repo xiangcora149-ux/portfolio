@@ -374,6 +374,14 @@
     box-shadow: 0 3px 12px rgba(58,42,24,.06);
   }
   .portfolio-page img { display: block; width: 100%; height: auto; }
+  .portfolio-page-caption {
+    display: block;
+    padding: 8px 12px 10px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+  }
   .chair-detail figure {
     margin: 0 0 14px;
     overflow: hidden;
@@ -1495,22 +1503,29 @@
   function buildPortfolioGallery() {
     if (portfolioGalleryBuilt) return;
     const fragment = document.createDocumentFragment();
-    for (const page of [4, 13, 15, 17, 24, 28, 29, 31, 37, 43]) {
+    for (const page of [4, 13, 15, 17, 24, 28, 29, 30, 31, 37, 43]) {
       const pageNumber = String(page).padStart(3, "0");
-      const imagePath = embeddedPortfolioImages[pageNumber];
+      const isAwardImage = page === 30;
+      const imagePath = isAwardImage ? "assets/project-01/awards.webp" : embeddedPortfolioImages[pageNumber];
       const link = document.createElement("a");
       link.className = "portfolio-page";
       link.href = imagePath;
       link.target = "_blank";
       link.rel = "noopener";
-      link.setAttribute("aria-label", `在新标签页打开作品集第 ${page} 页`);
+      link.setAttribute("aria-label", isAwardImage ? "在新标签页查看小火车四项获奖证书" : `在新标签页打开作品集第 ${page} 页`);
 
       const image = document.createElement("img");
       image.src = imagePath;
-      image.alt = `工业设计作品集第 ${page} 页`;
+      image.alt = isAwardImage ? "儿童音乐感知小火车获奖证书：湖北赛区一等奖、全国总决赛三等奖、时报金犊奖优秀奖与三等奖" : `工业设计作品集第 ${page} 页`;
       image.loading = "lazy";
       image.decoding = "async";
       link.append(image);
+      if (isAwardImage) {
+        const caption = document.createElement("span");
+        caption.className = "portfolio-page-caption";
+        caption.textContent = "小火车相关获奖情况";
+        link.append(caption);
+      }
       fragment.append(link);
     }
     portfolioGallery.append(fragment);
